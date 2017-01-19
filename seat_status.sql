@@ -1,21 +1,21 @@
-DELIMITER //
-CREATE FUNCTION seat_status(seat_number VARCHAR(20)) RETURNS INT(11)
-BEGIN
-	DECLARE seat_state VARCHAR(20);
-	DECLARE flag INT;
-	
-	SET seat_state = (SELECT seat_availablity FROM seat_status WHERE seat_id = ( SELECT seat_id FROM seats WHERE seat_no = seat_number));
-	IF(seat_state ='available')
-	THEN
-	SET flag=1;
-	ELSE 
-	SET flag=0;
-	END IF;
-	RETURN flag;
 
-END //
+CREATE TABLE `seat_status` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `seat_id` INT(11) DEFAULT NULL,
+  `seat_availablity` VARCHAR(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_seat_id` (`seat_id`),
+  CONSTRAINT `fk_seat_id` FOREIGN KEY (`seat_id`) REFERENCES `seats` (`Seat_Id`)
+)
 
-DELIMITER ;
-
-DROP FUNCTION seat_status
-SELECT seat_status('Seat_1')
+--------------------------------------------------------------------------------------------
+INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`) VALUES('1','1','Available');
+INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`) VALUES('2','2','Available');
+INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`) VALUES('3','3','Available');
+INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`) VALUES('4','4','Available');
+INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`) VALUES('5','5','Available');
+INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`) VALUES('6','6','Available');
+INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`) VALUES('7','7','Available');
+INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`) VALUES('8','8','Available');
+INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`) VALUES('9','9','Available');
+INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`) VALUES('10','10','Available');
