@@ -1,28 +1,30 @@
 DELIMITER $$
 
-CREATE PROCEDURE cancel_order(seatno VARCHAR(20),item VARCHAR(20))
+CREATE PROCEDURE cancel_order(seatno VARCHAR(20),item VARCHAR(20),order_id_param INT)
 BEGIN
 DECLARE itemId INT;
 DECLARE itemType INT;
-DECLARE f_orderedTime VARCHAR(20);
-DECLARE l_qty INT;
-DECLARE qty INT;
-DECLARE f_ordereditem VARCHAR(20);
+DECLARE var_ordered_time VARCHAR(20);
+DECLARE var_order_id VARCHAR(20);
+DECLARE Transaction_item_quantity_var INT;
+DECLARE var_ordered_item VARCHAR(20);
 
-SET f_ordereditem=(SELECT  item_name FROM food_transaction WHERE seat_no=seatno AND item_name=item
-		ORDER BY ordered_time DESC LIMIT 0,1);
-SET f_orderedTime=(SELECT  ordered_time FROM food_transaction WHERE seat_no=seatno AND item_name=f_ordereditem
-		ORDER BY ordered_time DESC LIMIT 0,1);
-SET qty=(SELECT quantity FROM food_transaction WHERE seat_no=seatno AND item_name=item ORDER BY ordered_time DESC LIMIT 0,1);
-SET itemId = (SELECT Item_Id FROM menu_items WHERE Item_name=item);
-SET itemType = (SELECT Food_Type FROM menu WHERE Menu_Item=itemId AND Food_Type IN
-		 (SELECT Type_id FROM food_types WHERE food_types.`Start_Time` <=f_orderedTime  AND food_types.`End_Time`>=f_orderedTime ));
+SET var_order_id=(SELECT  order_id FROM food_transaction 
+		  WHERE seat_no=seatno AND item_name=item AND order_id = order_id_param);
+
+SET var_ordered_item=(SELECT item_name FROM food_transaction 
+		      WHERE seat_no=seatno AND item_name=item AND order_id=var_order_id);
+-- ----------------------------------------------------------------------
+SET var_ordered_time=(SELECT  ordered_time FROM food_transaction 
+		      WHERE seat_no=seatno AND item_name=item AND order_id=var_order_id);
+-- ---------------------------------------------------------		      
+SET Transaction_item_quantity_var=(SELECT quantity FROM food_transaction 
+		                  WHERE seat_no=seatno AND item_name=item AND order_id=var_order_id);                               
 		 
-SET l_qty=(SELECT quantity FROM menu WHERE Menu_Item=itemId AND Food_Type=itemType);
-#IF (l_qty<(SELECT quantity FROM foodtype WHERE id=itemType))
+
 UPDATE food_transaction
-SET quantity=0,order_status='Cancelled'
-WHERE seat_no=seatno AND item_name = f_ordereditem AND ordered_time=f_orderedTime;
+SET order_status='Cancelled'
+WHERE seat_no=seatno AND item_name = var_ordered_item AND ordered_time=var_ordered_time AND order_id = var_order_id;
 SELECT 'Order cancelled sucessfully' AS message;
 
 END $$
@@ -30,4 +32,4 @@ DELIMITER ;
 
 DROP PROCEDURE cancel_order
 
-CALL cancel_order('seat_6','dosa')
+CALL cancel_order('seat_4','variety',835)

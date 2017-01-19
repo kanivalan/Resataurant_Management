@@ -1,3 +1,4 @@
+#Function to check whether the seat is present in the seats table
 DELIMITER //
 
 CREATE FUNCTION check_seat(seat_number VARCHAR(10)) RETURNS INT 

@@ -1,3 +1,4 @@
+#check whether the quantity is present according to the items
 DELIMITER //
 
 CREATE FUNCTION check_quantity(item_id INT,item_type INT,item_quantity INT) RETURNS INT(20)
