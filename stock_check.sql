@@ -20,9 +20,4 @@ DELIMITER ;
 DROP FUNCTION check_stock_quantity
 SELECT check_stock_quantity('idly',1,1)
 
-TRUNCATE TABLE food_transaction
 
-
-SELECT * FROM view_stock
-UNION
-SELECT * FROM stock_unused
