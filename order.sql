@@ -65,5 +65,4 @@ SET stock_check_var  = check_stock_quantity(Food_Name,item_id_var,item_type_var)
   DROP PROCEDURE Request_order      
   
   CALL Request_Order('dosa',5,'seat_6','10:20:00')
-  TRUNCATE TABLE food_transaction
   
