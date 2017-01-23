@@ -19,5 +19,3 @@ DELIMITER ;
 
 DROP FUNCTION check_stock_quantity
 SELECT check_stock_quantity('idly',1,1)
-
-
