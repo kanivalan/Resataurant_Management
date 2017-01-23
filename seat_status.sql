@@ -1,22 +1,25 @@
+DELIMITER //
+CREATE FUNCTION seat_status(seat_number VARCHAR(20)) RETURNS INT(11)
+BEGIN
+	DECLARE seat_state VARCHAR(20);
+	DECLARE flag INT;
+	
+	SET seat_state = (SELECT seat_availablity FROM seat_status WHERE seat_id = ( SELECT seat_id FROM seats WHERE seat_no = seat_number));
+	IF(seat_state ='available')
+	THEN
+	IF (SELECT state FROM seat_status WHERE seat_id =(SELECT seat_id FROM seats WHERE seat_no = seat_number)) = FALSE
+	THEN 
+	UPDATE seat_status SET state = TRUE WHERE seat_id =(SELECT seat_id FROM seats WHERE seat_no = seat_number);
+	SET flag=1;
+	END IF;
+	ELSE 
+	SET flag=0;
+	END IF;
+	RETURN flag;
 
-CREATE TABLE `seat_status` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `seat_id` INT(11) DEFAULT NULL,
-  `seat_availablity` VARCHAR(20) DEFAULT NULL,
-  `state` TINYINT(1) DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `fk_seat_id` (`seat_id`),
-  CONSTRAINT `fk_seat_id` FOREIGN KEY (`seat_id`) REFERENCES `seats` (`Seat_Id`)
-)
+END //
 
----------
-INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`, `state`) VALUES('1','1','Available','0');
-INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`, `state`) VALUES('2','2','Available','0');
-INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`, `state`) VALUES('3','3','Available','0');
-INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`, `state`) VALUES('4','4','Available','0');
-INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`, `state`) VALUES('5','5','Available','0');
-INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`, `state`) VALUES('6','6','Available','0');
-INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`, `state`) VALUES('7','7','Available','0');
-INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`, `state`) VALUES('8','8','Available','0');
-INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`, `state`) VALUES('9','9','Available','0');
-INSERT INTO `seat_status` (`id`, `seat_id`, `seat_availablity`, `state`) VALUES('10','10','Available','0');
+DELIMITER ;
+
+DROP FUNCTION seat_status
+SELECT seat_status('Seat_1')
