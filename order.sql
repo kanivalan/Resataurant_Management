@@ -1,6 +1,6 @@
 DELIMITER //
 
-CREATE PROCEDURE Request_Order(order_id INT,Food_Name VARCHAR(20),Quantity INT ,Seat_number VARCHAR(20),ordered_time TIME)
+CREATE PROCEDURE Request_Order(order_id INT,Food_Name VARCHAR(20),Quantity INT ,Seat_number VARCHAR(20),ordered_time TIME, OUT out_message VARCHAR(200))
 BEGIN 
 /*--------variable Declaration--------------*/
 DECLARE seat_check_var INT;
@@ -33,29 +33,35 @@ SET stock_check_var  = check_stock_quantity(Food_Name,item_id_var,item_type_var)
                 THEN
                 INSERT INTO food_transaction(order_id,seat_no,item_id,quantity,ordered_time,order_status) VALUES (order_id,seat_number,item_id_var,Quantity,ordered_time,"success"); 
                 UPDATE seat_status SET seat_availablity = "unavailable" WHERE seat_id = ( SELECT seat_id FROM seats WHERE seat_no = seat_number);                 
-                SELECT "order placed" AS message;
+                SELECT "order placed" INTO out_message;
+                SELECT out_message;
                 ELSE 
-                SELECT "Please Come at right Time" AS message;
+                SELECT "Please Come at right Time" INTO out_message;
+                SELECT out_message;
                 END IF;
                 
   
    
   ELSEIF (item_check_var = 0)
   THEN
-  SELECT "invalid item" AS message;
+  SELECT "invalid item" INTO out_message;
+  SELECT out_message;
   
   ELSEIF (seat_check_var != 1)
   THEN 
-  SELECT "invalid seat" AS message;
+  SELECT "invalid seat" INTO out_message;
+  SELECT out_message;
   
   ELSEIF (quantity_check_var = 0)
   THEN 
-  SELECT "invalid quantity or time " AS message; 	
+  SELECT "invalid quantity or time " INTO out_message; 
+  SELECT out_message;	
   
   
   ELSEIF (stock_check_var = 0)
   THEN
-  SELECT "No stock" AS message; 
+  SELECT "No stock" INTO out_message; 
+  SELECT out_message;
   END IF;
   
   END //
@@ -65,4 +71,5 @@ SET stock_check_var  = check_stock_quantity(Food_Name,item_id_var,item_type_var)
   DROP PROCEDURE Request_order      
   
   CALL Request_Order('dosa',5,'seat_6','10:20:00')
+  TRUNCATE TABLE food_transaction
   
