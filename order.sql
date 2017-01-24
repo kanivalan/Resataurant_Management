@@ -33,8 +33,7 @@ SET stock_check_var  = check_stock_quantity(Food_Name,item_id_var,item_type_var)
                 THEN
                 INSERT INTO food_transaction(order_id,seat_no,item_id,quantity,ordered_time,order_status) VALUES (order_id,seat_number,item_id_var,Quantity,ordered_time,"success"); 
                 UPDATE seat_status SET seat_availablity = "unavailable" WHERE seat_id = ( SELECT seat_id FROM seats WHERE seat_no = seat_number);                 
-                SELECT "order placed" INTO out_message;
-                SELECT out_message;
+                SELECT "order placed" INTO out_message;               
                 ELSE 
                 SELECT "Please Come at right Time" INTO out_message;
                 SELECT out_message;
