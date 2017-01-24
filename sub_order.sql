@@ -44,7 +44,7 @@ CREATE
                  SET seat_availablity='Available' , state = FALSE
                  WHERE seat_id=( SELECT seat_id FROM seats WHERE seat_no = seat_number);
                  
-                DO SLEEP(2);
+              
                  END IF;
                    SET items = INSERT(items,1,_nextlen1 + 1,'');
                    SET quantity = INSERT(quantity,1,_nextlen2 + 1,'');
