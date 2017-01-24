@@ -1,6 +1,6 @@
 DELIMITER $$
 
-CREATE PROCEDURE cancel_order(seatno VARCHAR(20),item VARCHAR(20),order_id_param INT)
+CREATE PROCEDURE cancel_order(seatno VARCHAR(20),item VARCHAR(20),order_id_param INT,OUT output_message VARCHAR(200))
 BEGIN
 DECLARE itemId INT;
 DECLARE itemType INT;
@@ -25,11 +25,12 @@ SET Transaction_item_quantity_var=(SELECT quantity FROM food_transaction
 UPDATE food_transaction
 SET order_status='Cancelled'
 WHERE seat_no=seatno AND item_id = item_id_var AND ordered_time=var_ordered_time AND order_id = var_order_id;
-SELECT 'Order cancelled sucessfully' AS message;
+SELECT 'Order cancelled sucessfully' INTO output_message;
+SELECT output_message;
 
 END $$
 DELIMITER ;
 SELECT * FROM food_transaction
 DROP PROCEDURE cancel_order
 
-CALL cancel_order('seat_4','idly',215)
+CALL cancel_order('seat_2','vada',632,@output_message)
