@@ -61,6 +61,10 @@ SET stock_check_var  = check_stock_quantity(Food_Name,item_id_var,item_type_var)
   THEN
   SELECT "No stock" INTO out_message; 
   SELECT out_message;
+  
+  ELSE
+  SELECT "seat unavailable" INTO out_message;
+  
   END IF;
   
   END //
