@@ -2,7 +2,7 @@
 DELIMITER $$
 CREATE
    
-    PROCEDURE sub_order(IN items MEDIUMTEXT,IN quantity MEDIUMTEXT,seat_number VARCHAR(20),order_time TIME)
+    PROCEDURE sub_order(IN items MEDIUMTEXT,IN quantity MEDIUMTEXT,seat_number VARCHAR(20),order_time TIME,OUT message VARCHAR(200))
     
     BEGIN
           DECLARE _next1 TEXT DEFAULT NULL ;
@@ -33,10 +33,12 @@ CREATE
                  
                  SET counter = counter + 1;
                  IF(counter > (SELECT order_limit FROM orders_limit) )
-                 THEN SELECT 'Please choose an order below 5';                 
+                 THEN 
+                 SELECT 'Please choose an order below 5' INTO message;                 
+                 SELECT message;
                  ELSE
-                 CALL Request_Order(order_id,_next1,_next2,seat_number,order_time);
-                 
+                 CALL Request_Order(order_id,_next1,_next2,seat_number,order_time,@out_message);
+                 SELECT out_message INTO message;
                  UPDATE seat_status
                  SET seat_availablity='Available' , state = FALSE
                  WHERE seat_id=( SELECT seat_id FROM seats WHERE seat_no = seat_number);
@@ -53,6 +55,7 @@ DELIMITER ;
 DROP PROCEDURE sub_order
 
 
-CALL sub_order('vada','1','seat_2','10:30:00')
+CALL sub_order('vada','1','seat_2','10:30:00',@out_message)
+
 
 
