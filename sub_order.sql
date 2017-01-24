@@ -38,7 +38,8 @@ CREATE
                  SELECT message;
                  ELSE
                  CALL Request_Order(order_id,_next1,_next2,seat_number,order_time,@out_message);
-                 SELECT out_message INTO message;
+                 SELECT @out_message INTO message;
+                 SELECT message;
                  UPDATE seat_status
                  SET seat_availablity='Available' , state = FALSE
                  WHERE seat_id=( SELECT seat_id FROM seats WHERE seat_no = seat_number);
@@ -55,7 +56,7 @@ DELIMITER ;
 DROP PROCEDURE sub_order
 
 
-CALL sub_order('vada','1','seat_2','10:30:00',@out_message)
+CALL sub_order('idly','2','seat_5','10:00:00',@out_message)
 
 
 
